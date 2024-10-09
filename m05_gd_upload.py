@@ -6,16 +6,10 @@ from googleapiclient.discovery import build
 import pprint
 from datetime import datetime as dt
 import os
-from m00_proc import json_dump, format_bytes, clear_folder, gd_get_file_list
+from m00_proc import json_dump, format_bytes, gd_get_file_list
 
 
-def create_folder(parent_folder_id, name):
-    file_metadata = {'name': name, 'mimeType': 'application/vnd.google-apps.folder', 'parents': [parent_folder_id]}
-    created_id = service.files().create(body=file_metadata, fields='id').execute()
-    pp.pprint(created_id)
-
-
-def gd_clear_folder():  # Очистить папку
+def gd_clear_folder():  # Очистить папку в Google Drive
     filelist = gd_get_file_list(service)  # Получение списка файлов из Google Drive
     files_found_cnt = len(filelist)  # Количество найденных файлов в Google Drive
     files_deleted_cnt = 0
@@ -34,7 +28,7 @@ def gd_clear_folder():  # Очистить папку
 
 def gd_upload_file(local_file_path: str, local_file_name: str, gd_parent_id: str):  # Загрузка файла в Google Drive
     file_metadata = {'name': local_file_name, 'parents': [gd_parent_id]}
-    media = MediaFileUpload(local_file_path + local_file_name, resumable=True)
+    media = MediaFileUpload(os.path.join(local_file_path, local_file_name), resumable=True)
     try:
         created_id = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
     except:
@@ -44,7 +38,7 @@ def gd_upload_file(local_file_path: str, local_file_name: str, gd_parent_id: str
 
 
 # --------- Настройки ------------
-file_path1 = "01_test_files\\"
+file_path1 = "01_test_files"
 # Засекаем ОБЩЕЕ время
 print('----------------- Start -------------------')
 print('------ Список файлов на Google Drive ------')
@@ -61,7 +55,7 @@ service = build('drive', 'v3', credentials=credentials)
 
 # ---------- Сначала очистим папку в Google Drive
 du005_clear = {}  # Словарь на выход: результаты измерений
-print('----- Очистка папки в Google Drive ------')
+print('------ Очистка папки в Google Drive -------')
 # Файл для записи измерений в json-файл
 json_name = "du005_1_gd_folder_clear.json"
 # Первая строка в json-файле, комментарий
@@ -82,7 +76,7 @@ file_size_whole = 0  # Общий размер всех записанных ф�
 print('----- Загрузка файлов в Google Drive ------')
 start_upload_time = dt.now()  # Засекаем время начала загрузки
 # Список файлов локальных, для загрузки в Google Drive
-files_to_upload = [d.name for d in os.scandir(file_path1) if d.is_file() and (not d.name[-1] == 'k')]
+files_to_upload = [d.name for d in os.scandir(file_path1) if d.is_file()]
 file_count = len(files_to_upload)  # Количество файлов для загрузки
 # Файл для записи измерений в json-файл
 json_name = "du005_3_gd_upload_api.json"
