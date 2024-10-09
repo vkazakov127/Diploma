@@ -1,21 +1,9 @@
 # -*- coding: utf-8 -*-
 # m04_multiproc.py
-from random import choice
 from datetime import datetime as dt
 import os
 import multiprocessing as mp
-from m00_proc import json_dump, format_bytes, clear_folder
-
-
-def one_txt_file_generator(file_full_name: str):
-    with open(file_full_name, mode='w', encoding='utf8') as file:
-        source_str = 'abcdefghijklmnopqrstuvwxyz1234567890'
-        char_cnt = 2966547  # Количество символов в файле; такое колич-во, например, во всех томах "Война и мир"
-        my_string = [choice(source_str) for _ in range(char_cnt)]
-        file.write("".join(my_string))
-    short_name = file_full_name[file_full_name.rfind('\\') + 1:]
-    print(f'\n{short_name} is generated.')
-    return file.closed
+from m00_proc import json_dump, format_bytes, clear_folder, one_txt_file_generator
 
 
 if __name__ == '__main__':
