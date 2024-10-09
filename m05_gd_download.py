@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 # m05_gd_download.py
 from google.oauth2 import service_account
-from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 from googleapiclient.discovery import build
 import pprint
-import io
 from datetime import datetime as dt
-import os
-from m00_proc import json_dump, format_bytes, clear_folder
+from m00_proc import json_dump, clear_folder
 from m00_proc import gd_get_file_list, gd_download_file
 
 
