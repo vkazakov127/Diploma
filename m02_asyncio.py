@@ -46,8 +46,8 @@ async def main():
         task1 = asyncio.create_task(one_txt_file_generator(full_name_i))
         tasks1.append(task1)
     # А теперь эти задачи выполняем, по списку tasks1
-    for t_i in tasks1:
-        await t_i
+    for t in tasks1:
+        await t
     # ---------
     # Измеряем ОБЩЕЕ duration — интервал времени
     end_time_whole = dt.now()  # Засекаем ОБЩЕЕ время
@@ -64,3 +64,4 @@ async def main():
 
 # Тут происходит асинхронный запуск main()
 asyncio.run(main())
+
