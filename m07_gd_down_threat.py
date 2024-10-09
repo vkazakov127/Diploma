@@ -4,18 +4,15 @@ from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 from googleapiclient.discovery import build
 import pprint
-import io
 from datetime import datetime as dt
-import os
-from m00_proc import json_dump, format_bytes, clear_folder
+from m00_proc import json_dump, clear_folder
 from m00_proc import gd_get_file_list, gd_download_file
 from threading import Thread
-import shutil
-
 
 # --------- Настройки ------------
 file_path1 = "01_test_files"  # Для загрузки в Google Drive
 file_path2 = "02_test_files"  # Для скачивания из Google Drive
+
 # Засекаем ОБЩЕЕ время
 start_time_file_list = dt.now()
 # ---------
@@ -57,6 +54,28 @@ start_download_time = dt.now()  # Засекаем время начала за�
 du007_down_thread['Start'] = f'Download files from Google Drive by Threads. Number of files={file_count}'
 
 threads1 = []  # Список потоков
+max_thread_cnt = 5  # Максимальное количество потоков
+i1 = 0
+i2 = i1 + max_thread_cnt
+while i2 < file_count:
+    for file_i in filelist[i1:i2]:
+        file_id = file_i['id']
+        file_name = file_i['name']
+        # Объявление потока
+        thread_i = Thread(target=gd_download_file, args=(service, file_id, file_path2, file_name))
+        threads1.append(thread_i)  # Список потоков
+    # start Threads
+    for i in threads1:
+        i.start()
+    # join threads
+    for i in threads1:
+        i.join()
+    # new iteration
+    i1 = i2
+    i2 = i1 + max_thread_cnt
+    threads1 = []  # Список потоков
+
+"""    
 for file_i in filelist:
     file_id = file_i['id']
     file_name = file_i['name']
@@ -69,6 +88,7 @@ for i in threads1:
 # join threads
 for i in threads1:
     i.join()
+"""
 # ------- Это конец
 end_download_time = dt.now()  # Засекаем время окончания загрузки
 download_duration = end_download_time - start_download_time
