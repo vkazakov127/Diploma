@@ -7,9 +7,8 @@ import pprint
 import io
 from datetime import datetime as dt
 import os
-import json
 import asyncio
-from m00_proc import json_dump, format_bytes, clear_folder, gd_get_file_list
+from m00_proc import json_dump, clear_folder, gd_get_file_list
 
 
 async def gd_download_file(gd_file_id: str, local_file_path: str, local_file_name: str):
