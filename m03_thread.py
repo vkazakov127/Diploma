@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 # m03_thread.py
-from random import choice
 from datetime import datetime as dt
 from threading import Thread
 import os
-from m00_proc import json_dump, format_bytes, clear_folder
-
-
-def one_txt_file_generator(file_full_name: str):
-    with open(file_full_name, mode='w', encoding='utf8') as file:
-        my_string = [choice(source_str) for _ in range(char_cnt)]
-        file.write("".join(my_string))
-    print(f'\n{file_full_name} is generated.')
-    return file.closed
+from m00_proc import json_dump, clear_folder, one_txt_file_generator
 
 
 # --------- Настройки ------------
@@ -22,8 +13,6 @@ file_names1 = []  # Список имён файлов, которые буду�
 threads1 = []  # Список потоков
 file_count = 100
 json_name = "du003_threads.json"
-source_str = 'abcdefghijklmnopqrstuvwxyz1234567890'
-char_cnt = 2966547  # Количество символов в файле; такое колич-во, например, во всех томах "Война и мир"
 du003_dict = {}  # Словарь на выход
 # --------------------------------
 print('--------- Start ----------')
@@ -62,3 +51,4 @@ file_closed = json_dump(du003_dict, json_name)
 
 print(f'duration_whole = {duration_whole} Sec')
 print('-------- The End ---------')
+
