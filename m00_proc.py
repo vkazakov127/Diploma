@@ -7,6 +7,7 @@ import io
 from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload, MediaFileUpload
 from googleapiclient.discovery import build
+from random import choice
 
 
 def json_dump(output_dic: dict, json_file_name: str) -> bool:
@@ -72,3 +73,14 @@ def gd_download_file(service, gd_file_id: str, local_file_path: str, local_file_
             print(f'Download: {local_file_name}, {int(status.progress() * 100)} %')
         finally:
             return done and attempts_number
+
+
+def one_txt_file_generator(file_full_name: str) -> bool:  # Генерируем текстовый файл
+    source_str = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    char_cnt = 2966547  # Количество символов в файле; такое колич-во, например, во всех томах "Война и мир"
+    # Создаём файл
+    with open(file_full_name, mode='w', encoding='utf8') as file:
+        my_string = [choice(source_str) for _ in range(char_cnt)]
+        file.write("".join(my_string))
+    return file.closed
+
