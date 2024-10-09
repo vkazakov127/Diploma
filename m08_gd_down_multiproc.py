@@ -9,7 +9,7 @@ import os
 import io
 import multiprocessing as mp
 from m00_proc import json_dump, format_bytes, clear_folder
-from m00_proc import gd_get_file_list, gd_download_file
+from m00_proc import gd_get_file_list
 
 
 def gd_download_file_by_pool(gd_file_dict: dict) -> bool:
